@@ -2,11 +2,11 @@ from mastodon import Mastodon
 from time import sleep
 import html2text
 import random
+import sys
 
 """
 Please install package "Mastodon.py" and "html2text"!
-pip install Mastodon.py
-pip install html2text
+pip install -r requirements.txt
 
 Set your mastodon accesstoken in token.secret and change api_base_url
 """
@@ -21,8 +21,10 @@ h = html2text.HTML2Text()
 
 
 def check_mentions():
-    global mentions
-    notifications = mastodon.notifications(mentions_only = True)
+    try:
+        notifications = mastodon.notifications(mentions_only = True)
+    except:
+        return
 
     for noti in notifications:
         mentions.append(noti)
@@ -41,6 +43,7 @@ def reply_mentions():
 
                 try:
                     mastodon.status_reply(in_reply_to_id = mention["status"]["id"], status = status, to_status = mention["status"])
+                    print(status + "\n\n")
                 except:
                     print("Not found toot")
             elif content[2] == "세트":
@@ -53,6 +56,7 @@ def reply_mentions():
 
                 try:
                     mastodon.status_reply(in_reply_to_id = mention["status"]["id"], status = status, to_status = mention["status"])
+                    print(status + "\n\n")
                 except:
                     print("Not found toot")
 
